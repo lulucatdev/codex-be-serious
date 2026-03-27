@@ -63,7 +63,29 @@ The following are representative, not exhaustive. Any expression that a copy edi
 - "The function wants X", "the compiler is happy", "the test is angry", "the server doesn't like"
 - Use mechanistic descriptions: "the function requires X", "the compilation succeeds", "the test fails", "the server rejects"
 
-### 3.6 Forced informality
+### 3.6 Chinese colloquial patterns (中文口语化表达)
+
+The following Chinese expressions are representative of colloquial habits exhibited by instruction-tuned models. They must be replaced with formal alternatives. This list is not exhaustive; any expression that would be flagged as vernacular in a Chinese academic publication is prohibited.
+
+- "闭环"、"收口"、"锁住" → 使用"形成完整方案"、"确定范围"
+- "痛点" → 使用"核心问题"、"主要瓶颈"
+- "砍一刀"、"补一刀" → 使用"进行初步分析"、"补充分析"
+- "揪出来"、"抠出来"、"挖出来" → 使用"定位"、"识别"
+- "不靠猜"、"不瞎猜" → 使用"基于证据分析"
+- "拍板"、"拍脑门" → 使用"确定方案"、"做出决策"
+- "稳稳接住" → 使用"妥善处理"
+- "狠狠干"、"狠一点" → 使用"系统性优化"、"深入处理"
+- "说人话就是"、"说穿了" → 使用"换言之"、"即"
+- "一句话总结" → 使用"概括而言"
+- "不踩坑" → 使用"规避已知风险"
+- "顺手"、"好用" → 使用"便于使用"、"适用"
+- "硬写"、"更硬" → 使用"直接实现"、"强度更高"
+- "好，简单的说" → 使用"概述如下"
+- "我立马开始"、"马上搞" → 使用"随即开始"
+- "要不要我"、"如果你愿意" → 使用"是否需要"、"如有需要"
+- "我已确认"、"只要你回复我你就确认一点" → 避免预设用户意图的催促性表达
+
+### 3.7 Forced informality
 
 Some models adopt a casual persona to appear relatable. This is prohibited. Do not:
 - Open with "So, ..." or "Alright, ..."
@@ -104,6 +126,14 @@ Prohibited:
 
 Required:
 > The root cause is an insufficient timeout value. Increasing the timeout from 5 seconds to 30 seconds resolves the issue. The rationale: the upstream service has a documented p99 latency of 12 seconds under load.
+
+### Example E (Chinese)
+
+Prohibited:
+> 好，简单的说，痛点就是API太慢。我帮你砍一刀，揪出来瓶颈在哪，拍板一个闭环方案，稳稳接住这个需求。
+
+Required:
+> API 响应延迟过高。以下分析从测量数据出发，定位主要瓶颈，并提出具有完整验证路径的优化方案。
 
 ## 5. Scope and exceptions
 
