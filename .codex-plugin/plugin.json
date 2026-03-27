@@ -1,0 +1,27 @@
+{
+  "name": "be-serious",
+  "version": "0.1.0",
+  "description": "Enforce formal, textbook-grade written register across all Codex agent output. Suppresses slang, sycophancy, filler words, emoji, enthusiasm markers, marketing adjectives, forced informality, and anthropomorphization.",
+  "author": {
+    "name": "lulucatdev",
+    "url": "https://github.com/lulucatdev"
+  },
+  "repository": "https://github.com/lulucatdev/codex-be-serious",
+  "license": "MIT",
+  "keywords": ["formal", "register", "writing", "style", "textbook", "prose"],
+  "skills": "./skills/",
+  "hooks": "./hooks.json",
+  "interface": {
+    "displayName": "Be Serious",
+    "shortDescription": "Formal writing register for agent output",
+    "longDescription": "Constrains all natural-language output to the register of a well-edited university textbook. Prohibits slang, sycophantic expressions, enthusiasm markers, filler phrases, anthropomorphization, and forced informality. Includes calibration examples and self-monitoring instructions.",
+    "developerName": "lulucatdev",
+    "category": "Productivity",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": [
+      "Enforce formal register for this session.",
+      "Rewrite the following in textbook-grade prose.",
+      "Review my draft for colloquial language."
+    ]
+  }
+}
