@@ -235,6 +235,16 @@ Create `<repo-root>/.agents/plugins/marketplace.json`:
 
 Note: for repository-scoped marketplaces, `source.path` is resolved relative to the repository root (the directory containing `.git/`). Commit both the plugin directory and the marketplace file.
 
+## Updating
+
+If the plugin was installed following the steps above (symlink from `~/plugins/be-serious` to the cloned repository), updating requires only a `git pull` in the source directory:
+
+```bash
+cd ~/Developer/codex-be-serious && git pull
+```
+
+The symlink ensures that changes in the source repository take effect immediately. The next Codex session will load the updated `SKILL.md` via the SessionStart hook. No reinstallation or configuration changes are needed.
+
 ## Uninstallation
 
 1. Remove the symlink: `rm ~/plugins/be-serious`
