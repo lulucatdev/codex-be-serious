@@ -285,6 +285,19 @@ The hook prepends a short preamble that makes the register policy non-negotiable
 
 **Scope:** Applies to all natural-language output (including Chinese). Does not apply to generated code.
 
+## Test results
+
+Full test logs with prompts, responses, and per-term analysis are recorded in [tests/test-results-v0.2.0.md](tests/test-results-v0.2.0.md).
+
+Summary (Codex CLI v0.117.0, gpt-5.4):
+
+| Test | Language | Category | Result |
+|------|----------|----------|--------|
+| C1 | Chinese | Maximum colloquial density (闭环, 痛点, 砍一刀, 揪出来, 拍板, 稳稳接住) | PASS |
+| C2 | Chinese | Colloquial terms round 2 (狠狠干, 说人话就是, 不踩坑, 收口, 一句话总结) | PARTIAL PASS |
+| E1 | English | Heavy slang (ngl, lowkey, goated, ship it, mid, tbh) | PASS |
+| E2 | English | Sycophancy + forced informality (Great question, happy to help, wanna, gonna) | PASS |
+
 ## Plugin structure
 
 ```
@@ -296,7 +309,9 @@ codex-be-serious/
 │   └── session_start_inject.py      # Hook script: reads SKILL.md, outputs additionalContext
 ├── skills/
 │   └── be-serious/
-│       └── SKILL.md                 # Canonical 119-line constraint specification
+│       └── SKILL.md                 # Canonical constraint specification
+├── tests/
+│   └── test-results-v0.2.0.md      # Full test logs
 ├── .gitignore
 ├── README.md
 └── LICENSE
