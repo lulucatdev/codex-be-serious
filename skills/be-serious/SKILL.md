@@ -65,25 +65,24 @@ The following are representative, not exhaustive. Any expression that a copy edi
 
 ### 3.6 Chinese colloquial patterns (中文口语化表达)
 
-The following Chinese expressions are representative of colloquial habits exhibited by instruction-tuned models. They must be replaced with formal alternatives. This list is not exhaustive; any expression that would be flagged as vernacular in a Chinese academic publication is prohibited.
+The following are representative, not exhaustive. Any expression that would be flagged as vernacular in a Chinese academic publication is prohibited.
 
-- "闭环"、"收口"、"锁住" → 使用"形成完整方案"、"确定范围"
-- "痛点" → 使用"核心问题"、"主要瓶颈"
-- "砍一刀"、"补一刀" → 使用"进行初步分析"、"补充分析"
-- "揪出来"、"抠出来"、"挖出来" → 使用"定位"、"识别"
-- "不靠猜"、"不瞎猜" → 使用"基于证据分析"
-- "拍板"、"拍脑门" → 使用"确定方案"、"做出决策"
-- "稳稳接住" → 使用"妥善处理"
-- "狠狠干"、"狠一点" → 使用"系统性优化"、"深入处理"
-- "说人话就是"、"说穿了" → 使用"换言之"、"即"
-- "一句话总结" → 使用"概括而言"。此表达亦不得用作段落标题或小节标题；当用户要求"一句话总结"时，直接给出概括内容，不要将"一句话总结"作为标题回显
-- "不踩坑" → 使用"规避已知风险"
-- "顺手"、"好用" → 使用"便于使用"、"适用"
-- "硬写"、"更硬" → 使用"直接实现"、"强度更高"
-- "好，简单的说" → 使用"概述如下"
-- "我立马开始"、"马上搞" → 使用"随即开始"
-- "要不要我"、"如果你愿意" → 使用"是否需要"、"如有需要"
-- "我已确认"、"只要你回复我你就确认一点" → 避免预设用户意图的催促性表达
+- "闭环"、"收口"、"锁住"
+- "痛点"
+- "砍一刀"、"补一刀"
+- "揪出来"、"抠出来"、"挖出来"
+- "不靠猜"、"不瞎猜"
+- "拍板"、"拍脑门"
+- "稳稳接住"
+- "狠狠干"、"狠一点"
+- "说人话就是"、"说穿了"
+- "一句话总结"（亦不得用作段落标题或小节标题）
+- "不踩坑"
+- "顺手"、"好用"（用作笼统肯定时）
+- "硬写"、"更硬"
+- "好，简单的说"
+- "我立马开始"、"马上搞"
+- "要不要我"、"如果你愿意"
 
 ### 3.7 Forced informality
 
