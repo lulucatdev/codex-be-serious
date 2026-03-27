@@ -10,64 +10,40 @@ A Codex plugin that enforces formal, textbook-grade written register across all 
 
 ## Installation
 
-Installation consists of three steps: cloning the plugin, enabling the hooks feature flag, and registering the plugin in a local marketplace. All steps are detailed below with exact commands.
+Installation consists of four steps: cloning the plugin, enabling feature flags, registering the plugin in a local marketplace, and enabling it in the Codex config. All steps are detailed below with exact commands.
 
 ### Step 1: Clone the plugin
 
-Clone this repository into a permanent location. The example below uses `~/Developer/`, but any directory is acceptable. The plugin files must remain at this path — the marketplace configuration will reference it.
+Clone this repository into a permanent location. The example below uses `~/Developer/`, but any directory is acceptable.
 
 ```bash
 git clone https://github.com/lulucatdev/codex-be-serious.git ~/Developer/codex-be-serious
 ```
 
-### Step 2: Enable the hooks feature flag
+### Step 2: Symlink the plugin into the marketplace directory
 
-Codex hooks are behind a feature flag. Add the following to `~/.codex/config.toml`. If the file does not exist, create it.
+Codex resolves local plugin paths relative to the **marketplace root**, which is the directory three levels above `marketplace.json`. For a user-level marketplace at `~/.agents/plugins/marketplace.json`, the root is `~/`. Therefore, `"path": "./plugins/be-serious"` in the marketplace resolves to `~/plugins/be-serious`.
 
-Add the following TOML section to the file:
-
-```toml
-[features]
-codex_hooks = true
-```
-
-**Placement matters.** In TOML, bare key-value pairs (lines without a `[section]` header) must appear before any section header. The `[features]` block must therefore be placed **after** any bare top-level keys (such as `model`, `model_provider`) but **before or between** other `[section]` blocks. For example:
-
-```toml
-# Top-level keys come first (no section header)
-model_provider = "openai"
-model = "o3-pro"
-
-# Sections follow
-[features]
-codex_hooks = true
-
-[model_providers.openai]
-# ...
-```
-
-If `~/.codex/config.toml` already contains a `[features]` section, add `codex_hooks = true` under that existing section instead of creating a duplicate.
-
-**Reference:** [Codex Hooks documentation](https://developers.openai.com/codex/hooks) — see the "Hooks are behind a feature flag" section.
-
-### Step 3: Register the plugin in a local marketplace
-
-Codex discovers plugins through marketplace JSON files. For user-level (global) installation, the marketplace file lives at `~/.agents/plugins/marketplace.json`. The plugin files themselves are referenced from `~/.agents/plugins/plugins/be-serious/`.
-
-#### 3a. Create the directory structure and symlink the plugin
+Create the directory and symlink:
 
 ```bash
-mkdir -p ~/.agents/plugins/plugins
-ln -sf ~/Developer/codex-be-serious ~/.agents/plugins/plugins/be-serious
+mkdir -p ~/plugins
+ln -sf ~/Developer/codex-be-serious ~/plugins/be-serious
 ```
 
-The symlink means that any changes to the source repository (e.g., `git pull`) take effect immediately without reinstallation.
+The symlink means that any changes to the source repository (e.g., `git pull`) take effect immediately without reinstallation. If you cloned to a different path in Step 1, adjust the symlink source accordingly.
 
-If you cloned the repository to a different path in Step 1, adjust the symlink source accordingly.
+**Path resolution rule:** The marketplace file lives at `<root>/.agents/plugins/marketplace.json`, but local plugin `source.path` values are resolved relative to `<root>`, NOT relative to `.agents/plugins/`. See [marketplace.rs in codex-rs](https://github.com/openai/codex/blob/main/codex-rs/core/src/plugins/marketplace.rs) for the implementation.
 
-#### 3b. Create or update the marketplace file
+### Step 3: Create the marketplace file
 
-Create `~/.agents/plugins/marketplace.json` with the following content:
+Create `~/.agents/plugins/marketplace.json`:
+
+```bash
+mkdir -p ~/.agents/plugins
+```
+
+Write the following content to `~/.agents/plugins/marketplace.json`:
 
 ```json
 {
@@ -96,12 +72,83 @@ If `~/.agents/plugins/marketplace.json` already exists with other plugins, appen
 
 **Reference:** [Codex Plugins documentation](https://developers.openai.com/codex/plugins) — see the "Marketplace" section for the full marketplace JSON specification.
 
-### Step 4: Verify the installation
+### Step 4: Enable feature flags and register the plugin in Codex config
 
-Run the following command to confirm the hook script executes correctly and produces valid output:
+Edit `~/.codex/config.toml` to enable hooks, the plugin system, and mark the plugin as installed and enabled.
+
+Add the following to the `[features]` section (create it if it does not exist):
+
+```toml
+[features]
+codex_hooks = true
+plugins = true
+```
+
+Then add the plugin registration section:
+
+```toml
+[plugins."be-serious@local"]
+enabled = true
+```
+
+**Placement matters.** In TOML, bare key-value pairs (lines without a `[section]` header) must appear before any section header. The `[features]` block must be placed **after** any bare top-level keys (such as `model`, `model_provider`) but **before or between** other `[section]` blocks. For example:
+
+```toml
+# Top-level keys come first (no section header)
+model_provider = "openai"
+model = "o3-pro"
+
+# Sections follow
+[features]
+codex_hooks = true
+plugins = true
+
+[plugins."be-serious@local"]
+enabled = true
+
+[model_providers.openai]
+# ...
+```
+
+If `~/.codex/config.toml` already contains a `[features]` section, add the keys under that existing section instead of creating a duplicate.
+
+**Reference:** [Codex Hooks documentation](https://developers.openai.com/codex/hooks) — see the "Hooks are behind a feature flag" section.
+
+### Step 5: (Optional) Register the SessionStart hook globally
+
+The plugin includes a `hooks.json` that Codex loads when the plugin is installed. For additional reliability, you can also register the hook directly in `~/.codex/hooks.json`, which fires regardless of the plugin's TUI installation state.
+
+Create `~/.codex/hooks.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/plugins/be-serious/hooks/session_start_inject.py",
+            "statusMessage": "Loading formal register constraint"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+If `~/.codex/hooks.json` already exists with other hooks, merge the `SessionStart` entry into the existing structure.
+
+**Reference:** [Codex Hooks documentation](https://developers.openai.com/codex/hooks) — see the "Where Codex looks for hooks" and "SessionStart" sections.
+
+### Step 6: Verify the installation
+
+Run the following command to confirm the hook script executes correctly:
 
 ```bash
-cd ~/.agents/plugins/plugins/be-serious && python3 hooks/session_start_inject.py | python3 -c "
+cd ~/plugins/be-serious && python3 hooks/session_start_inject.py | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 ctx = d['hookSpecificOutput']['additionalContext']
@@ -120,9 +167,19 @@ additionalContext: 6474 characters
 Verification passed.
 ```
 
-### Step 5: Restart Codex
+### Step 7: Restart Codex
 
 Close and reopen Codex CLI (or start a new session). The `SessionStart` hook will inject the formal register constraint automatically. The status line will briefly display "Loading formal register constraint" during initialization.
+
+## Installation summary
+
+| Item | Path |
+|------|------|
+| Source repository | `~/Developer/codex-be-serious` (or custom path) |
+| Plugin symlink | `~/plugins/be-serious` → source repository |
+| Marketplace file | `~/.agents/plugins/marketplace.json` |
+| Codex config | `~/.codex/config.toml` |
+| Global hooks (optional) | `~/.codex/hooks.json` |
 
 ## Installation for a team (repository-scoped)
 
@@ -132,11 +189,11 @@ To enforce the constraint across all contributors to a specific repository, add 
 
 ```bash
 # Option A: copy (self-contained, no external dependency)
-cp -r ~/Developer/codex-be-serious <repo-root>/.agents/plugins/plugins/be-serious
+cp -r ~/Developer/codex-be-serious <repo-root>/plugins/be-serious
 
 # Option B: git submodule (tracks upstream)
 cd <repo-root>
-git submodule add https://github.com/lulucatdev/codex-be-serious.git .agents/plugins/plugins/be-serious
+git submodule add https://github.com/lulucatdev/codex-be-serious.git plugins/be-serious
 ```
 
 #### 2. Create or update the repository marketplace
@@ -166,14 +223,15 @@ Create `<repo-root>/.agents/plugins/marketplace.json`:
 }
 ```
 
-Commit both the plugin directory and the marketplace file. All team members with hooks enabled will receive the constraint automatically.
+Note: for repository-scoped marketplaces, `source.path` is resolved relative to the repository root (the directory containing `.git/`). Commit both the plugin directory and the marketplace file.
 
 ## Uninstallation
 
-1. Remove the symlink: `rm ~/.agents/plugins/plugins/be-serious`
+1. Remove the symlink: `rm ~/plugins/be-serious`
 2. Remove the `be-serious` entry from `~/.agents/plugins/marketplace.json` (or delete the file if it contains no other plugins).
-3. Optionally remove `codex_hooks = true` from `~/.codex/config.toml` if no other hooks are in use.
-4. Optionally remove the cloned repository: `rm -rf ~/Developer/codex-be-serious`
+3. Remove the `[plugins."be-serious@local"]` section from `~/.codex/config.toml`.
+4. Optionally remove `~/.codex/hooks.json` (or the `SessionStart` entry within it).
+5. Optionally remove the cloned repository: `rm -rf ~/Developer/codex-be-serious`
 
 ## How it works
 
@@ -241,6 +299,7 @@ This plugin is a Codex port of [pi-be-serious](https://github.com/lulucatdev/pi-
 - [Codex Hooks](https://developers.openai.com/codex/hooks) — hook events, matcher patterns, input/output schemas, feature flag
 - [Codex Plugins](https://developers.openai.com/codex/plugins) — plugin manifest spec, marketplace configuration, installation policies
 - [Codex Skills](https://developers.openai.com/codex/skills) — skill file format, discovery, invocation
+- [marketplace.rs source](https://github.com/openai/codex/blob/main/codex-rs/core/src/plugins/marketplace.rs) — plugin path resolution implementation
 
 ## License
 
