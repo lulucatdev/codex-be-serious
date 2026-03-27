@@ -225,6 +225,16 @@ codex-be-serious/
 └── LICENSE
 ```
 
+## Other platforms
+
+This plugin is a Codex port of [pi-be-serious](https://github.com/lulucatdev/pi-be-serious), which was originally built for the [pi](https://github.com/mariozechner/pi) coding agent. The constraint specification and enforcement preamble are identical; only the injection mechanism differs.
+
+| Platform | Repository | Enforcement mechanism |
+|----------|------------|----------------------|
+| OpenAI Codex CLI | this repository | `SessionStart` hook with `additionalContext` |
+| pi | [pi-be-serious](https://github.com/lulucatdev/pi-be-serious) | `before_agent_start` extension hook |
+| Claude Code | Built-in skill at `~/.claude/skills/be-serious/` | Superpowers skill auto-trigger |
+
 ## Official documentation references
 
 - [Codex CLI — GitHub repository](https://github.com/openai/codex)
