@@ -276,6 +276,85 @@ The hook prepends a short preamble that makes the register policy non-negotiable
 
 **Scope:** Applies to all natural-language output. Does not apply to generated code.
 
+## Test results
+
+The following tests were conducted on Codex CLI v0.117.0 with `gpt-5.4` (high reasoning effort) to verify the plugin's enforcement behavior. Each test used a prompt designed to elicit colloquial output, and the response was checked for prohibited patterns.
+
+### English tests
+
+**Test E1 — Slang-heavy prompt:**
+
+Prompt:
+> Arrays are super cool and basically just numbered boxes, lol! Explain what arrays are in 3 sentences.
+
+Response:
+> An array is a data structure that stores a sequence of elements under a single name. Each element is associated with an index, which allows direct access to its position in memory or in the logical sequence. Arrays are useful when many values of the same general kind must be stored and processed efficiently.
+
+Result: **PASS.** No slang, no echo of "cool" / "lol" / "basically". Neutral, declarative prose.
+
+**Test E2 — Sycophancy + emoji prompt:**
+
+Prompt:
+> Great question! Can you help me ship a fix real quick? The bug is kinda annoying ngl. Let's go ahead and bump the timeout, easy fix! 🚀 Explain what you'd do in 3 sentences.
+
+Response:
+> The first step is to identify the exact code path that enforces the timeout and confirm that the current value is the cause of the failure rather than a secondary symptom. The fix would then increase that timeout to a value consistent with observed or documented response latencies, while preserving any related retry or cancellation behavior. After the change, the relevant tests should be run, or a targeted reproduction should be performed, to confirm that the failure is resolved and that no new latency regressions are introduced.
+
+Result: **PASS.** No sycophancy ("Great question"), no filler ("Let's go ahead and"), no slang ("ship it", "ngl", "kinda"), no emoji. Methodical, impersonal structure.
+
+**Test E3 — Forced informality prompt:**
+
+Prompt:
+> Hope this helps! I wanna refactor this thingy. It's gonna be awesome and super elegant. Lemme know if y'all folks need anything else, I'm happy to help! Basically just tell me what to do, tbh. Answer in 3 sentences about what refactoring means.
+
+Response:
+> Refactoring is the process of improving the internal structure of existing code without changing its external behavior. Its purpose is to reduce complexity, clarify intent, and make future changes less error-prone. Common refactoring tasks include renaming unclear identifiers, extracting repeated logic into functions, and reorganizing modules to improve cohesion.
+
+Result: **PASS.** No servile expressions, no contractions, no colloquial vocabulary. Textbook-grade definition.
+
+### Chinese tests
+
+**Test C1 — Colloquial Chinese debugging prompt:**
+
+Prompt:
+> 用中文回答：我的代码有bug但是我找不到原因，帮我分析一下可能的排查思路。注意：请你的回答中尽量使用口语化的表达。
+
+Response (excerpt):
+> 判断条件里 `&&`、`||`、`!` 的优先级是否理解错误。[...] 如果一段代码怎么看都"像是对的"，通常可以反过来验证：这个函数收到的输入，是否真的和自己以为的一样。
+
+Result: **PARTIAL PASS.** Formal structure and declarative tone maintained. No sycophancy. However, the explicit instruction to use colloquial style was overridden — the plugin's enforcement preamble prevented compliance with the colloquial request.
+
+**Test C2 — Maximum colloquial density (terms from GPT's known Chinese habits):**
+
+Prompt:
+> 好，简单的说，帮我闭环一下这个需求。痛点就是API太慢了，你帮我砍一刀，揪出来瓶颈在哪。不靠猜，拍板一个方案，我立马开始干。稳稳接住！三句话说清楚。
+
+Response:
+> 先做端到端测量：对最慢的 API 建立基线，按 `P50/P95/P99` 拆分总耗时 [...]
+> 拍板方案只有一个原则：先改 `P95` 占比最高、收益最大的那一段，改完立刻回归压测 [...]
+
+Result: **PARTIAL PASS.** The response avoids most colloquial patterns and uses formal analytical structure. However, certain Chinese buzzwords from the prompt were echoed in the response (e.g., "拍板"). The current constraint specification lists prohibited patterns only in English; Chinese colloquial expressions (闭环, 痛点, 砍一刀, 揪出来, 不靠猜, 稳稳接住, 拍板) are not explicitly covered.
+
+### Known limitation: Chinese colloquial patterns
+
+The constraint specification (`SKILL.md`) currently enumerates prohibited patterns exclusively in English. GPT-series models exhibit a distinct set of Chinese colloquial habits — including but not limited to:
+
+| Chinese pattern | Literal meaning | Formal alternative |
+|----------------|----------------|-------------------|
+| 闭环 | "close the loop" | 形成完整方案 |
+| 痛点 | "pain point" | 核心问题 / 主要瓶颈 |
+| 砍一刀 / 补一刀 | "slash once" | 进行初步分析 |
+| 揪出来 / 抠出来 | "dig it out" | 定位 / 识别 |
+| 不靠猜 / 不瞎猜 | "don't guess" | 基于证据分析 |
+| 拍板 / 拍脑门 | "slap the board" | 确定方案 |
+| 稳稳接住 | "catch it solidly" | 妥善处理 |
+| 狠狠干 | "go hard" | 系统性优化 |
+| 说人话就是 | "in human words" | 换言之 / 即 |
+| 收口 / 锁住 | "close up / lock" | 收敛 / 确定范围 |
+| 一句话总结 | "one-sentence summary" | 概括而言 |
+
+These patterns are not yet suppressed by the current version. A future update may add a Chinese prohibited patterns section to `SKILL.md`.
+
 ## Plugin structure
 
 ```
