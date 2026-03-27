@@ -1,27 +1,35 @@
 {
   "name": "be-serious",
-  "version": "0.1.0",
-  "description": "Enforce formal, textbook-grade written register across all Codex agent output. Suppresses slang, sycophancy, filler words, emoji, enthusiasm markers, marketing adjectives, forced informality, and anthropomorphization.",
+  "version": "0.2.0",
+  "description": "Enforce formal, textbook-grade written register across all Codex agent output. Suppresses slang, sycophancy, filler words, emoji, enthusiasm markers, marketing adjectives, forced informality, anthropomorphization, and Chinese colloquial buzzwords.",
   "author": {
     "name": "lulucatdev",
+    "email": "lucas@lulucat.com",
     "url": "https://github.com/lulucatdev"
   },
+  "homepage": "https://github.com/lulucatdev/codex-be-serious",
   "repository": "https://github.com/lulucatdev/codex-be-serious",
   "license": "MIT",
-  "keywords": ["formal", "register", "writing", "style", "textbook", "prose"],
+  "keywords": ["formal", "register", "writing", "style", "textbook", "prose", "chinese"],
   "skills": "./skills/",
   "hooks": "./hooks.json",
   "interface": {
     "displayName": "Be Serious",
     "shortDescription": "Formal writing register for agent output",
-    "longDescription": "Constrains all natural-language output to the register of a well-edited university textbook. Prohibits slang, sycophantic expressions, enthusiasm markers, filler phrases, anthropomorphization, and forced informality. Includes calibration examples and self-monitoring instructions.",
+    "longDescription": "Constrains all natural-language output to the register of a well-edited university textbook. Prohibits slang, sycophantic expressions, enthusiasm markers, filler phrases, anthropomorphization, forced informality, and Chinese colloquial buzzwords (闭环, 痛点, 砍一刀, 拍板, etc.). Includes calibration examples in English and Chinese, plus self-monitoring instructions.",
     "developerName": "lulucatdev",
     "category": "Productivity",
     "capabilities": ["Interactive"],
+    "websiteURL": "https://github.com/lulucatdev/codex-be-serious",
+    "privacyPolicyURL": "https://github.com/lulucatdev/codex-be-serious/blob/main/LICENSE",
+    "termsOfServiceURL": "https://github.com/lulucatdev/codex-be-serious/blob/main/LICENSE",
     "defaultPrompt": [
       "Enforce formal register for this session.",
       "Rewrite the following in textbook-grade prose.",
       "Review my draft for colloquial language."
-    ]
+    ],
+    "brandColor": "#1A1A2E",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
   }
 }

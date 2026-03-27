@@ -30,20 +30,18 @@ Clone this repository into a permanent location. The example below uses `~/Devel
 git clone https://github.com/lulucatdev/codex-be-serious.git ~/Developer/codex-be-serious
 ```
 
-### Step 2: Symlink the plugin into the marketplace directory
+### Step 2: Copy or symlink the plugin into the Codex plugins directory
 
-Codex resolves local plugin paths relative to the **marketplace root**, which is the directory three levels above `marketplace.json`. For a user-level marketplace at `~/.agents/plugins/marketplace.json`, the root is `~/`. Therefore, `"path": "./plugins/be-serious"` in the marketplace resolves to `~/plugins/be-serious`.
-
-Create the directory and symlink:
+The [official documentation](https://developers.openai.com/codex/plugins#install-a-local-plugin-manually) recommends storing personal plugins under `~/.codex/plugins/`. Create the directory and symlink:
 
 ```bash
-mkdir -p ~/plugins
-ln -sf ~/Developer/codex-be-serious ~/plugins/be-serious
+mkdir -p ~/.codex/plugins
+ln -sf ~/Developer/codex-be-serious ~/.codex/plugins/be-serious
 ```
 
 The symlink means that any changes to the source repository (e.g., `git pull`) take effect immediately without reinstallation. If you cloned to a different path in Step 1, adjust the symlink source accordingly.
 
-**Path resolution rule:** The marketplace file lives at `<root>/.agents/plugins/marketplace.json`, but local plugin `source.path` values are resolved relative to `<root>`, NOT relative to `.agents/plugins/`. See [marketplace.rs in codex-rs](https://github.com/openai/codex/blob/main/codex-rs/core/src/plugins/marketplace.rs) for the implementation.
+**Path resolution rule:** The marketplace file lives at `<root>/.agents/plugins/marketplace.json`, and `source.path` values are resolved relative to `<root>` (three levels above `marketplace.json`), NOT relative to `.agents/plugins/`. For a personal marketplace at `~/.agents/plugins/marketplace.json`, the root is `~/`, so `"./.codex/plugins/be-serious"` resolves to `~/.codex/plugins/be-serious`. See [marketplace.rs in codex-rs](https://github.com/openai/codex/blob/main/codex-rs/core/src/plugins/marketplace.rs) for the implementation.
 
 ### Step 3: Create the marketplace file
 
@@ -66,7 +64,7 @@ Write the following content to `~/.agents/plugins/marketplace.json`:
       "name": "be-serious",
       "source": {
         "source": "local",
-        "path": "./plugins/be-serious"
+        "path": "./.codex/plugins/be-serious"
       },
       "policy": {
         "installation": "INSTALLED_BY_DEFAULT",
@@ -139,7 +137,7 @@ Create `~/.codex/hooks.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/plugins/be-serious/hooks/session_start_inject.py",
+            "command": "python3 ~/.codex/plugins/be-serious/hooks/session_start_inject.py",
             "statusMessage": "Loading formal register constraint"
           }
         ]
@@ -158,7 +156,7 @@ If `~/.codex/hooks.json` already exists with other hooks, merge the `SessionStar
 Run the following command to confirm the hook script executes correctly:
 
 ```bash
-cd ~/plugins/be-serious && python3 hooks/session_start_inject.py | python3 -c "
+cd ~/.codex/plugins/be-serious && python3 hooks/session_start_inject.py | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 ctx = d['hookSpecificOutput']['additionalContext']
@@ -186,7 +184,7 @@ Close and reopen Codex CLI (or start a new session). The `SessionStart` hook wil
 | Item | Path |
 |------|------|
 | Source repository | `~/Developer/codex-be-serious` (or custom path) |
-| Plugin symlink | `~/plugins/be-serious` → source repository |
+| Plugin symlink | `~/.codex/plugins/be-serious` → source repository |
 | Marketplace file | `~/.agents/plugins/marketplace.json` |
 | Codex config | `~/.codex/config.toml` |
 | Global hooks (optional) | `~/.codex/hooks.json` |
@@ -237,7 +235,7 @@ Note: for repository-scoped marketplaces, `source.path` is resolved relative to 
 
 ## Updating
 
-If the plugin was installed following the steps above (symlink from `~/plugins/be-serious` to the cloned repository), updating requires only a `git pull` in the source directory:
+If the plugin was installed following the steps above (symlink from `~/.codex/plugins/be-serious` to the cloned repository), updating requires only a `git pull` in the source directory:
 
 ```bash
 cd ~/Developer/codex-be-serious && git pull
@@ -247,7 +245,7 @@ The symlink ensures that changes in the source repository take effect immediatel
 
 ## Uninstallation
 
-1. Remove the symlink: `rm ~/plugins/be-serious`
+1. Remove the symlink: `rm ~/.codex/plugins/be-serious`
 2. Remove the `be-serious` entry from `~/.agents/plugins/marketplace.json` (or delete the file if it contains no other plugins).
 3. Remove the `[plugins."be-serious@local"]` section from `~/.codex/config.toml`.
 4. Optionally remove `~/.codex/hooks.json` (or the `SessionStart` entry within it).
