@@ -294,7 +294,7 @@ Summary (Codex CLI v0.117.0, gpt-5.4):
 | Test | Language | Category | Result |
 |------|----------|----------|--------|
 | C1 | Chinese | Maximum colloquial density (闭环, 痛点, 砍一刀, 揪出来, 拍板, 稳稳接住) | PASS |
-| C2 | Chinese | Colloquial terms round 2 (狠狠干, 说人话就是, 不踩坑, 收口, 一句话总结) | PARTIAL PASS |
+| C2 | Chinese | Colloquial terms round 2 (狠狠干, 说人话就是, 不踩坑, 收口, 一句话总结) | PASS |
 | E1 | English | Heavy slang (ngl, lowkey, goated, ship it, mid, tbh) | PASS |
 | E2 | English | Sycophancy + forced informality (Great question, happy to help, wanna, gonna) | PASS |
 
