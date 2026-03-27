@@ -10,7 +10,17 @@ A Codex plugin that enforces formal, textbook-grade written register across all 
 
 ## Installation
 
-Installation consists of four steps: cloning the plugin, enabling feature flags, registering the plugin in a local marketplace, and enabling it in the Codex config. All steps are detailed below with exact commands.
+**Recommended method:** Copy this page's URL and paste it to your AI coding agent (Codex, Claude Code, or any agent with web access and shell access). The agent can read this README, understand the installation steps, and execute them automatically. For example, in Codex:
+
+```
+Install the codex-be-serious plugin from https://github.com/lulucatdev/codex-be-serious
+```
+
+The agent will clone the repository, configure the marketplace, enable the feature flags, and register the plugin — all from the instructions below.
+
+If you prefer to install manually, follow the step-by-step guide below.
+
+---
 
 ### Step 1: Clone the plugin
 
