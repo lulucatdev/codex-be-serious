@@ -20,15 +20,19 @@ process.stdin.on("end", () => {
   for (const needle of [
     "serious scholar",
     "textbook-grade prose",
+    "Style profile: serious scholarly prose",
     "Register constraint",
     "Prohibited patterns",
-    "Calibration examples: serious scholarly prose",
+    "Core calibration examples: serious scholarly prose",
     "The correction is warranted.",
     "这个修正成立。",
   ]) {
     if (!context.includes(needle)) {
       throw new Error(`missing expected phrase: ${needle}`);
     }
+  }
+  if (context.includes("Extended calibration examples")) {
+    throw new Error("hook payload should not include the extended example bank");
   }
   console.log(`Hook output valid: ${context.length} characters`);
 });

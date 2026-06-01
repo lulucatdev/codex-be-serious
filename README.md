@@ -65,7 +65,8 @@ The plugin has two enforcement layers.
 
 1. `SessionStart` hook: `hooks/hooks.json` injects the register constraint on `startup`, `resume`, `clear`, and `compact`. This means the policy is refreshed after automatic context compaction, not only at the beginning of a thread.
 2. Active skill: `skills/be-serious/SKILL.md` defines the explicit `be-serious` skill. Invoking `be-serious`, `$be-serious`, or `@be-serious` activates the same scholarly register for the current session, even when the hook was not the trigger.
-3. Examples: `skills/be-serious/examples.md` contains the imitation corpus. The hook inserts this file directly after `SKILL.md` so the agent sees the examples as active context, not as external documentation.
+3. Review skill: `skills/be-serious-review/SKILL.md` audits and rewrites prose against the same register.
+4. Examples: `skills/be-serious/examples.md` contains the core imitation corpus. `skills/be-serious/examples-extended.md` contains additional cases for active skill and review use. The hook inserts the core corpus after `SKILL.md` and `style-profile.md`.
 
 The hook command uses `PLUGIN_ROOT`, so it does not depend on the current project directory:
 
@@ -73,7 +74,7 @@ The hook command uses `PLUGIN_ROOT`, so it does not depend on the current projec
 "command": "/bin/sh \"${PLUGIN_ROOT}/hooks/session_start_inject.sh\""
 ```
 
-The hook script is shell plus `awk`. It reads `skills/be-serious/SKILL.md`, removes YAML frontmatter, appends `skills/be-serious/examples.md`, prepends an enforcement preamble, JSON-escapes the result, and writes `hookSpecificOutput.additionalContext` for `SessionStart`.
+The hook script is shell plus `awk`. It reads `skills/be-serious/SKILL.md`, removes YAML frontmatter, appends `skills/be-serious/style-profile.md` and `skills/be-serious/examples.md`, prepends an enforcement preamble, JSON-escapes the result, and writes `hookSpecificOutput.additionalContext` for `SessionStart`.
 
 ## 语体约束 / Register Constraint
 
@@ -107,6 +108,12 @@ Run the hook smoke test:
 
 ```bash
 /bin/sh tests/check-hook.sh
+```
+
+Run the style-contract test:
+
+```bash
+/bin/sh tests/check-style-contract.sh
 ```
 
 Or inspect the hook output directly:
@@ -143,7 +150,13 @@ codex-be-serious/
 │       ├── agents/
 │       │   └── openai.yaml
 │       ├── SKILL.md
-│       └── examples.md
+│       ├── examples.md
+│       ├── examples-extended.md
+│       └── style-profile.md
+│   └── be-serious-review/
+│       ├── agents/
+│       │   └── openai.yaml
+│       └── SKILL.md
 ├── assets/
 │   ├── icon.png
 │   └── logo.png
@@ -156,7 +169,7 @@ codex-be-serious/
 
 ## 测试记录 / Test Record
 
-The historical model-behavior test log is in `tests/test-results-v0.2.0.md`. Version `0.3.0` adds the compact-safe hook lifecycle, removes the Python runtime dependency, inserts a dedicated example corpus into hook context, and updates installation instructions for the current plugin workflow.
+The historical model-behavior test log is in `tests/test-results-v0.2.0.md`. Version `0.4.0` adds a style profile, splits core and extended examples, adds the `be-serious-review` skill, and adds deterministic style-contract tests.
 
 ## 官方文档 / Official Documentation
 

@@ -1,7 +1,7 @@
 {
   "name": "be-serious",
-  "version": "0.3.0",
-  "description": "Enforce serious, scholarly, textbook-grade written register across Codex agent output. Reinjects the constraint after startup, resume, clear, and context compaction. Suppresses slang, sycophancy, filler words, emoji, enthusiasm markers, marketing adjectives, forced informality, anthropomorphization, and Chinese colloquial buzzwords.",
+  "version": "0.4.0",
+  "description": "Enforce serious, scholarly, textbook-grade written register across Codex agent output. Reinjects the constraint after startup, resume, clear, and context compaction. Provides a style profile, core and extended imitation examples, and an active review skill for prose audit and rewriting.",
   "author": {
     "name": "lulucatdev",
     "email": "lucas@lulucat.com",
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Be Serious",
     "shortDescription": "Scholarly textbook register for agent output",
-    "longDescription": "Constrains natural-language output to the register of a serious scholar writing in well-edited university textbook prose. Prohibits slang, sycophantic expressions, enthusiasm markers, filler phrases, anthropomorphization, forced informality, and Chinese colloquial buzzwords (闭环, 痛点, 砍一刀, 拍板, etc.). Reinjects the constraint and a dedicated imitation example corpus after startup, resume, clear, and context compaction.",
+    "longDescription": "Constrains natural-language output to the register of a serious scholar writing in well-edited university textbook prose. Prohibits slang, sycophantic expressions, enthusiasm markers, filler phrases, anthropomorphization, forced informality, and Chinese colloquial buzzwords (闭环, 痛点, 砍一刀, 拍板, etc.). Reinjects the constraint, a style profile, and core imitation examples after startup, resume, clear, and context compaction. Includes be-serious-review for prose audit and rewriting.",
     "developerName": "lulucatdev",
     "category": "Productivity",
     "capabilities": ["Interactive"],

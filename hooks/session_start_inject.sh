@@ -9,6 +9,7 @@ else
 fi
 
 skill_path=$plugin_root/skills/be-serious/SKILL.md
+profile_path=$plugin_root/skills/be-serious/style-profile.md
 examples_path=$plugin_root/skills/be-serious/examples.md
 
 if [ ! -f "$skill_path" ]; then
@@ -32,6 +33,12 @@ PREAMBLE
     frontmatter && $0 == "---" { frontmatter = 0; next }
     !frontmatter { print }
   ' "$skill_path"
+  if [ -f "$profile_path" ]; then
+    printf '\n\n'
+    cat "$profile_path"
+  else
+    printf 'warning: %s not found\n' "$profile_path" >&2
+  fi
   if [ -f "$examples_path" ]; then
     printf '\n\n'
     cat "$examples_path"
